@@ -1,0 +1,2 @@
+#!/bin/bash
+cut _b 1 | tr_d '\n' | uniq
