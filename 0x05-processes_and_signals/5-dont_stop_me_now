@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+# finds 4's PID and kills it
