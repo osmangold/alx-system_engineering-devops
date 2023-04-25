@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# configures nginx
+apt-get update -y
+apt-get install nginx -y
+touch /var/www/html/index.html
+echo "Holberton School" > /var/www/html/index.html
+touch /var/www/html/error.html
+echo "Ceci n'est pas une page" > /var/www/html/error.html
+error="\n\terror_page 404 \/error.html;\n"
+sed -r -i "/^\s+server_name .+;/a\ $error" /etc/nginx/sites-available/default
+sed -r -i "/^\s+server_name .+;/a\ $error" /etc/nginx/sites-enabled/default
+service nginx restart

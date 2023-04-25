@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# configures nginx
+apt-get update -y
+apt-get install nginx -y
+touch /var/www/html/index.html
+echo "Holberton School" > /var/www/html/index.html
+redir="\tlocation /redirect_me {\n\t\treturn 301 https:\/\/www.youtube.com\/watch\?v=QH2-TGUlwu4;\n\t}"
+sed -r -i "/^\s+server_name .+;/a\ $redir" /etc/nginx/sites-available/default
+service nginx restart
