@@ -4,15 +4,25 @@ import json
 import requests
 
 if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com/"
-    users = requests.get(url + "users").json()
+    url = "https://jsonplaceholder.typicode.com/todos"
+    response = requests.get(url)
+    todos = response.json()
 
-    with open("todo_all_employees.json", "w") as jsonfile:
-        json.dump({
-            u.get("id"): [{
-                "task": t.get("title"),
-                "completed": t.get("completed"),
-                "username": u.get("username")
-            } for t in requests.get(url + "todos",
-                                    params={"userId": u.get("id")}).json()]
-            for u in users}, jsonfile)
+    # Create an empty dictionary to store tasks by user ID
+    tasks_by_user = {}
+
+    # Fill dictionary with tasks
+    for todo in todos:
+        if todo["userId"] not in tasks_by_user:
+            tasks_by_user[todo["userId"]] = []
+        task = {"username": "", "task": "", "completed": False}
+        task["username"] = requests.get("https://jsonplaceholder.typicode.com/users/{}".format(todo["userId"])).json()["username"]
+        task["task"] = todo["title"]
+        task["completed"] = todo["completed"]
+        tasks_by_user[todo["userId"]].append(task)
+
+    # Convert dictionary to JSON string
+    json_string = json.dumps(tasks_by_user)
+
+    # Write JSON string to file
+    with open("todo_all_employees.json", "w") as file:
